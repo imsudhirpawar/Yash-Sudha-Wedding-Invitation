@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #fdf7ee;
+  --color-cream-2: #f7ead9;
+  --color-maroon: #6d1226;
+  --color-maroon-soft: #8f2740;
+  --color-gold: #c1912f;
+  --color-gold-light: #e3c169;
+  --color-ink: #3b2318;
+  --font-script: "Great Vibes", cursive;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-display: "Marcellus", serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: #fdf7ee;
+  color: #3b2318;
+  font-family: "Cormorant Garamond", serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #6d1226;
+  color: #fdf7ee;
+}
+
+/* ---------- textured paper background ---------- */
+.paper {
+  background-color: #fdf7ee;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(193, 145, 47, 0.1), transparent 45%),
+    radial-gradient(circle at 88% 12%, rgba(109, 18, 38, 0.08), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(193, 145, 47, 0.12), transparent 55%);
+}
+
+.gold-text {
+  background: linear-gradient(100deg, #a97c17 0%, #e9cd7c 35%, #b8871f 55%, #f0dc9d 75%, #a97c17 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gold-line {
+  background: linear-gradient(90deg, transparent, #c1912f, transparent);
+}
+
+/* ---------- reveal on scroll ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- animations ---------- */
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+.float-slow {
+  animation: floatY 6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+.shimmer {
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(193, 145, 47, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 32px 6px rgba(193, 145, 47, 0.15);
+  }
+}
+.glow {
+  animation: glowPulse 3.4s ease-in-out infinite;
+}
+
+@keyframes flameFlicker {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.12) translateY(-2px);
+    opacity: 1;
+  }
+}
+.flame {
+  transform-origin: bottom center;
+  animation: flameFlicker 1.6s ease-in-out infinite;
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin-slow {
+  animation: spinSlow 40s linear infinite;
+}
+
+/* petals */
+@keyframes petalFall {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--drift, 40px), 110vh, 0) rotate(540deg);
+    opacity: 0;
+  }
+}
+.petal {
+  position: absolute;
+  top: -5vh;
+  animation-name: petalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* envelope open */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fadeUp 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: #f7ead9;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#c1912f, #6d1226);
+  border-radius: 9px;
+}
