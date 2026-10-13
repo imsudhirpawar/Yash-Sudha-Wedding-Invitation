@@ -4,11 +4,11 @@ import { couple } from "../data";
 const LINKS = [
   { id: "home", label: "Home" },
   { id: "couple", label: "Couple" },
-  { id: "story", label: "Our Story" },
+  // { id: "story", label: "Our Story" },
   { id: "events", label: "Events" },
-  { id: "gallery", label: "Gallery" },
+  // { id: "gallery", label: "Gallery" },
   { id: "venue", label: "Venue" },
-  { id: "rsvp", label: "RSVP" },
+  { id: "blessings", label: "Blessings" },
 ];
 
 export default function Nav() {

@@ -29,7 +29,7 @@ export function VenueSection() {
                   month: "long",
                   year: "numeric",
                 })}{" "}
-                · 8:12 PM
+                · 11:12 AM
               </p>
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <a
@@ -82,39 +82,23 @@ function AddToCalendar() {
   );
 }
 
-/* ------------------------------------------------ RSVP + Wishes */
-type Wish = { name: string; message: string; attending: string; at: number };
+/* ------------------------------------------------ Blessings */
+type Wish = { name: string; message: string; at: number };
 
-const KEY = "yash-sudharani-wishes";
-
-const SEED: Wish[] = [
-  {
-    name: "Aarti Kulkarni",
-    message:
-      "So happy for you both! Wishing you a lifetime of laughter and long chai evenings.",
-    attending: "Joyfully attending",
-    at: Date.now() - 86400000 * 3,
-  },
-  {
-    name: "Rohan & Family",
-    message: "May your journey together be as beautiful as your love story. See you at the mandap!",
-    attending: "Joyfully attending",
-    at: Date.now() - 86400000,
-  },
-];
+const KEY = "yash-sudharani-blessings";
+const LEGACY_KEY = "yash-sudharani-wishes";
 
 export function RsvpSection() {
-  const [wishes, setWishes] = useState<Wish[]>(SEED);
+  const [wishes, setWishes] = useState<Wish[]>([]);
   const [form, setForm] = useState({
     name: "",
-    guests: "1",
-    attending: "Joyfully attending",
     message: "",
   });
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
     try {
+      localStorage.removeItem(LEGACY_KEY);
       const raw = localStorage.getItem(KEY);
       if (raw) setWishes(JSON.parse(raw));
     } catch {
@@ -129,7 +113,6 @@ export function RsvpSection() {
       {
         name: form.name.trim(),
         message: form.message.trim(),
-        attending: form.attending,
         at: Date.now(),
       },
       ...wishes,
@@ -140,7 +123,7 @@ export function RsvpSection() {
     } catch {
       /* ignore */
     }
-    setForm({ name: "", guests: "1", attending: "Joyfully attending", message: "" });
+    setForm({ name: "", message: "" });
     setSent(true);
     setTimeout(() => setSent(false), 5000);
   };
@@ -149,15 +132,15 @@ export function RsvpSection() {
     "w-full rounded-xl border border-gold/40 bg-cream px-4 py-3 font-sans text-sm text-ink outline-none transition focus:border-maroon focus:ring-2 focus:ring-gold/30";
 
   return (
-    <section id="rsvp" className="paper py-20 sm:py-28">
+    <section id="blessings" className="paper py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <SectionTitle
-          kicker="Will you join us?"
-          title="RSVP & Blessings"
-          subtitle="Kindly confirm your presence by 10 November 2026 — and leave a wish for the couple."
+          kicker="Share your good wishes"
+          title="Blessings"
+          subtitle="Leave a blessing for Yash & Sudharani as they begin their life together."
         />
 
-        <div className="mt-14 grid gap-8 lg:grid-cols-2">
+        <div className="mx-auto mt-14 grid max-w-4xl gap-8 lg:grid-cols-2">
           <Reveal>
             <form
               onSubmit={submit}
@@ -175,36 +158,6 @@ export function RsvpSection() {
                     placeholder="e.g. Ananya Sharma"
                     required
                   />
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
-                      Number of Guests
-                    </label>
-                    <select
-                      className={`mt-2 ${field}`}
-                      value={form.guests}
-                      onChange={(e) => setForm({ ...form, guests: e.target.value })}
-                    >
-                      {["1", "2", "3", "4", "5+"].map((n) => (
-                        <option key={n}>{n}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
-                      Attendance
-                    </label>
-                    <select
-                      className={`mt-2 ${field}`}
-                      value={form.attending}
-                      onChange={(e) => setForm({ ...form, attending: e.target.value })}
-                    >
-                      <option>Joyfully attending</option>
-                      <option>Attending with family</option>
-                      <option>Regretfully unable</option>
-                    </select>
-                  </div>
                 </div>
                 <div>
                   <label className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
@@ -240,22 +193,23 @@ export function RsvpSection() {
               </h3>
               <Divider className="my-5" />
               <div className="max-h-[26rem] space-y-4 overflow-y-auto pr-1">
-                {wishes.map((w, i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl border border-gold/30 bg-cream px-5 py-4"
-                  >
-                    <div className="flex items-baseline justify-between gap-3">
+                {wishes.length === 0 ? (
+                  <p className="py-8 text-center font-serif text-lg italic text-ink/55">
+                    Be the first to share a blessing.
+                  </p>
+                ) : (
+                  wishes.map((w, i) => (
+                    <div
+                      key={`${w.at}-${i}`}
+                      className="rounded-2xl border border-gold/30 bg-cream px-5 py-4"
+                    >
                       <p className="font-display text-lg text-maroon">{w.name}</p>
-                      <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-gold">
-                        {w.attending}
-                      </span>
+                      <p className="mt-2 whitespace-pre-wrap font-serif text-lg italic leading-relaxed text-ink/75">
+                        “{w.message}”
+                      </p>
                     </div>
-                    <p className="mt-2 font-serif text-lg italic leading-relaxed text-ink/75">
-                      “{w.message}”
-                    </p>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </Reveal>
@@ -282,12 +236,23 @@ export function Footer() {
         </p>
         <div className="gold-line mx-auto my-7 h-px w-40" />
         <p className="font-sans text-[10px] uppercase tracking-[0.4em] text-gold-light">
-          22 · 11 · 2026 · Nagpur
+          30 · 12 · 2026 · Dombivli
         </p>
         <p className="mt-6 font-serif text-base text-cream/55">
-          With love, from the Deshmukh &amp; Patil families
+          With love, from the Pandit &amp; Kasar families
         </p>
       </div>
+      <p className="relative mt-10 font-sans text-[9px] text-cream/45">
+        Planning your wedding website? Connect on{" "}
+        <a
+          href="https://www.instagram.com/imsudhirpawar"
+          target="_blank"
+          rel="noreferrer"
+          className="underline underline-offset-2 transition hover:text-cream/75"
+        >
+          Instagram @imsudhirpawar
+        </a>
+      </p>
     </footer>
   );
 }

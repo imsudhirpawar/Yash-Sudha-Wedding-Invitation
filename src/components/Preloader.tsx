@@ -6,7 +6,7 @@ export default function Preloader({ onOpen }: { onOpen: () => void }) {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setReady(true), 2200);
+    const t = setTimeout(() => setReady(true), 200);
     return () => clearTimeout(t);
   }, []);
 

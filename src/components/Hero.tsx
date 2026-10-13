@@ -59,8 +59,7 @@ export default function Hero() {
           className="fade-up mt-9 max-w-xl font-serif text-lg italic text-ink/75 sm:text-xl"
           style={{ animationDelay: "0.6s" }}
         >
-          “Two souls, one journey — we invite you to witness the beginning of
-          our forever.”
+          “The beginning of a lifetime, the promise of forever — we invite you to be part of our forever”
         </p>
 
         <div
@@ -74,7 +73,7 @@ export default function Hero() {
             {dateLine}
           </span>
           <span className="mt-1 font-sans text-xs tracking-[0.25em] text-ink/60">
-            SHREE KRISHNA LAWNS · NAGPUR
+            The Heritage Banquet · Dombivli (E)
           </span>
         </div>
 

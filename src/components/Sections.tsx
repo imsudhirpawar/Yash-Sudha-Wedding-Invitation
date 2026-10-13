@@ -15,7 +15,7 @@ export function CoupleSection() {
         <SectionTitle
           kicker="The Bride & The Groom"
           title="Meet the Couple"
-          subtitle="With the blessings of the Almighty and our elders, two hearts become one."
+          subtitle="With divine grace and family blessings,we begin a sacred journey of togetherness."
         />
 
         <div className="mt-14 grid gap-10 md:grid-cols-2">
@@ -48,9 +48,7 @@ export function CoupleSection() {
 
         <Reveal delay={200}>
           <p className="mx-auto mt-12 max-w-2xl text-center font-serif text-xl italic text-ink/70">
-            “Let us walk together, speak together, and may our minds be as one
-            — bound by the sacred fire, blessed by our elders, for seven
-            lifetimes to come.”
+            “Let us walk together, share our dreams, and hold each other through every joy and challenge — blessed by God and our elders for seven lifetimes of love.”
           </p>
         </Reveal>
       </div>
@@ -69,7 +67,7 @@ export function EventsSection() {
         <SectionTitle
           kicker="Save these moments"
           title="Wedding Festivities"
-          subtitle="Six celebrations, countless memories — we would be honoured to have you at each one."
+          subtitle="Four celebrations, countless memories — we would be honoured to have you at each one."
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

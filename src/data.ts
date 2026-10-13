@@ -11,73 +11,73 @@ export const portraits = { groom: groomImg, bride: brideImg };
 export const couple = {
   groom: {
     name: "Yash",
-    full: "Yash Deshmukh",
+    full: "Mr. Yash Ganesh Pandit",
     role: "The Groom",
-    parents: "Son of Mr. Rajendra Deshmukh & Mrs. Sunita Deshmukh",
+    parents: "Son of Late Shri Ganesh Madhukar Pandit & Late Smt. Aarti Ganesh Pandit",
     words:
-      "A gentle soul with a restless heart — he found his calm the day he found her.",
+      "A restless heart, a gentle soul — he found his home, his happiness, and his forever in her.",
   },
   bride: {
     name: "Sudharani",
-    full: "Sudharani Patil",
+    full: "Ms. Sudharani Digambar Kasar",
     role: "The Bride",
-    parents: "Daughter of Mr. Mahesh Patil & Mrs. Vaishali Patil",
+    parents: "Daughter of Mr. Digambar Jagannath Kasar & Mrs. Padmashree Digambar Kasar",
     words:
-      "Sunshine in a saree — she turns ordinary days into festivals of joy.",
+      "She carried a thousand dreams in her heart, and he became the most beautiful of them all.",
   },
 };
 
-/** Wedding muhurat — 22 November 2026, 8:12 PM IST */
-export const weddingDate = new Date("2026-11-22T20:12:00+05:30");
+/** Wedding muhurat — 30 December 2026, 11:12 AM IST */
+export const weddingDate = new Date("2026-12-30T11:12:00+05:30");
 
 export const events = [
   {
+    icon: "💍",
+    name: "Engagement Ceremony",
+    date: "Tuesday, 29 December 2026",
+    time: "5:30 PM - 7:30 PM",
+    venue: "The Heritage Banquet, Dombivli (E)",
+    note: "A promise of love, a ring, and forever begins.",
+  },
+  {
     icon: "🌼",
     name: "Haldi Ceremony",
-    date: "Friday, 20 November 2026",
-    time: "10:00 AM onwards",
-    venue: "Deshmukh Nivas, Ramdaspeth, Nagpur",
+    date: "Tuesday, 29 December 2026",
+    time: "8:00 PM - 10:00 PM",
+    venue: "The Heritage Banquet, Dombivli (E)",
     note: "Turmeric, laughter and a whole lot of yellow.",
   },
-  {
-    icon: "🌿",
-    name: "Mehndi Night",
-    date: "Friday, 20 November 2026",
-    time: "5:00 PM onwards",
-    venue: "Patil House Courtyard, Dharampeth, Nagpur",
-    note: "Henna, dhol and stories that stain the heart.",
-  },
-  {
-    icon: "🎶",
-    name: "Sangeet Sandhya",
-    date: "Saturday, 21 November 2026",
-    time: "7:30 PM onwards",
-    venue: "Grand Emerald Banquet, Wardha Road, Nagpur",
-    note: "Two families, one dance floor. Bring your best moves.",
-  },
-  {
-    icon: "🐘",
-    name: "Baraat & Swagat",
-    date: "Sunday, 22 November 2026",
-    time: "5:30 PM onwards",
-    venue: "Shree Krishna Lawns, Nagpur",
-    note: "The groom arrives — with drums, lights and joy.",
-  },
+  // {
+  //   icon: "🎶",
+  //   name: "Sangeet Sandhya",
+  //   date: "Saturday, 21 November 2026",
+  //   time: "7:30 PM onwards",
+  //   venue: "The Heritage Banquet, Dombivli (E)",
+  //   note: "Two families, one dance floor. Bring your best moves.",
+  // },
+  // {
+  //   icon: "🐘",
+  //   name: "Baraat & Swagat",
+  //   date: "Wednesday, 30 December 2026",
+  //   time: "5:30 PM onwards",
+  //   venue: "The Heritage Banquet, Dombivli (E)",
+  //   note: "The groom arrives — with drums, lights and joy.",
+  // },
   {
     icon: "🔥",
     name: "Shubh Vivah",
-    date: "Sunday, 22 November 2026",
-    time: "8:12 PM (Muhurat)",
-    venue: "Shree Krishna Lawns, Nagpur",
+    date: "Wednesday, 30 December 2026",
+    time: "11:12 AM",
+    venue: "The Heritage Banquet, Dombivli (E)",
     note: "Seven vows, seven steps, one forever.",
   },
   {
     icon: "✨",
     name: "Reception",
-    date: "Monday, 23 November 2026",
-    time: "7:00 PM onwards",
-    venue: "The Regal Hall, Civil Lines, Nagpur",
-    note: "Dinner, blessings and the first dance as one.",
+    date: "Wednesday, 30 December 2026",
+    time: "1:00 PM - 3:00 PM",
+    venue: "The Heritage Banquet, Dombivli (E)",
+    note: "Lunch, blessings and the first dance as one.",
   },
 ];
 
@@ -94,9 +94,9 @@ export const gallery = [
 export const heroImage = hero;
 
 export const venue = {
-  name: "Shree Krishna Lawns",
-  address: "Plot 14, Wardha Road, Besa, Nagpur, Maharashtra 440037",
-  mapsQuery: "Shree+Krishna+Lawns+Wardha+Road+Nagpur",
+  name: "The Heritage Banquet",
+  address: "Ground Floor, Citi Mall, Near K V Pendharkar College, M.I, D.C, Kalyan Rd, Dombivli, Tata Power Company Limited, Dombivli East, Kalyan, Maharashtra 421203, India",
+  mapsQuery: "place/The+Heritage+Banquet/@19.2132055,73.1015473,818m/data=!3m3!1e3!4b1!5s0x3be79596d7159c05:0x6390a95e5ecd9fd7!4m6!3m5!1s0x3be79596d7a03127:0x9c31914b11435d51!8m2!3d19.2132056!4d73.1061607!16s%2Fg%2F1vkxkqw2?hl=en-US&entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
 };
 
 export const story = [

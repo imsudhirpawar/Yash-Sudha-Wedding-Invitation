@@ -29,9 +29,9 @@ export default function App() {
             <Hero />
             <CoupleSection />
             <Countdown />
-            <StorySection story={story} />
+            {/* <StorySection story={story} /> */}
             <EventsSection />
-            <GallerySection />
+            {/* <GallerySection /> */}
             <VenueSection />
             <RsvpSection />
           </main>
