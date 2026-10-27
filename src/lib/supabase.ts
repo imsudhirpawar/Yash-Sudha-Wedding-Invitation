@@ -33,9 +33,11 @@ type Database = {
 };
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseKey =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient<Database>(supabaseUrl, supabaseAnonKey)
+  supabaseUrl && supabaseKey
+    ? createClient<Database>(supabaseUrl, supabaseKey)
     : null;

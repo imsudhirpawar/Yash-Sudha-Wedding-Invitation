@@ -91,6 +91,46 @@ type Wish = {
   created_at: string;
 };
 
+const LOCAL_WISHES_KEY = "yash-sudharani-blessings";
+
+function readLocalWishes(): Wish[] {
+  const saved = window.localStorage.getItem(LOCAL_WISHES_KEY);
+  if (!saved) return [];
+
+  const wishes: unknown = JSON.parse(saved);
+  if (
+    !Array.isArray(wishes) ||
+    !wishes.every(
+      (wish): wish is Wish =>
+        typeof wish === "object" &&
+        wish !== null &&
+        typeof wish.id === "number" &&
+        typeof wish.name === "string" &&
+        typeof wish.message === "string" &&
+        typeof wish.created_at === "string",
+    )
+  ) {
+    throw new Error("Saved blessings have an invalid format.");
+  }
+
+  return wishes;
+}
+
+function saveLocalWish(name: string, message: string): Wish {
+  const wishes = readLocalWishes();
+  const wish: Wish = {
+    id: Math.min(-Date.now(), ...wishes.map((savedWish) => savedWish.id - 1)),
+    name,
+    message,
+    created_at: new Date().toISOString(),
+  };
+  window.localStorage.setItem(
+    LOCAL_WISHES_KEY,
+    JSON.stringify([wish, ...wishes]),
+  );
+  return wish;
+}
+
 export function RsvpSection() {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [form, setForm] = useState({
@@ -105,7 +145,13 @@ export function RsvpSection() {
   useEffect(() => {
     const client = supabase;
     if (!client) {
-      setError("The shared blessings book is not configured yet.");
+      try {
+        setWishes(readLocalWishes());
+      } catch (loadError) {
+        const details =
+          loadError instanceof Error ? loadError.message : "Unexpected storage error.";
+        setError(`Could not load saved blessings: ${details}`);
+      }
       setLoading(false);
       return;
     }
@@ -155,10 +201,30 @@ export function RsvpSection() {
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.message.trim()) return;
+    const name = form.name.trim();
+    const message = form.message.trim();
+    if (!name || !message) {
+      setError("Please enter your name and a blessing before sending.");
+      return;
+    }
+
     const client = supabase;
     if (!client) {
-      setError("The shared blessings book is not configured yet.");
+      setSaving(true);
+      setError(null);
+      try {
+        const wish = saveLocalWish(name, message);
+        setWishes((current) => [wish, ...current]);
+        setForm({ name: "", message: "" });
+        setSent(true);
+        setTimeout(() => setSent(false), 5000);
+      } catch (saveError) {
+        const details =
+          saveError instanceof Error ? saveError.message : "Unexpected storage error.";
+        setError(`Could not save your blessing on this device: ${details}`);
+      } finally {
+        setSaving(false);
+      }
       return;
     }
 
@@ -167,7 +233,7 @@ export function RsvpSection() {
     try {
       const { data, error: insertError } = await client
         .from("blessings")
-        .insert({ name: form.name.trim(), message: form.message.trim() })
+        .insert({ name, message })
         .select("id, name, message, created_at")
         .single();
 
@@ -209,10 +275,11 @@ export function RsvpSection() {
             >
               <div className="space-y-4">
                 <div>
-                  <label className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
+                  <label htmlFor="blessing-name" className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
                     Your Name
                   </label>
                   <input
+                    id="blessing-name"
                     className={`mt-2 ${field}`}
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -222,10 +289,11 @@ export function RsvpSection() {
                   />
                 </div>
                 <div>
-                  <label className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
+                  <label htmlFor="blessing-message" className="font-sans text-[10px] uppercase tracking-[0.3em] text-maroon-soft">
                     Your Wish for Us
                   </label>
                   <textarea
+                    id="blessing-message"
                     className={`mt-2 h-32 resize-none ${field}`}
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -236,14 +304,22 @@ export function RsvpSection() {
                 </div>
                 <button
                   type="submit"
-                  disabled={saving || !supabase}
+                  disabled={saving}
                   className="w-full rounded-full bg-maroon py-4 font-sans text-[11px] uppercase tracking-[0.35em] text-cream transition hover:scale-[1.02]"
                 >
                   {saving ? "Saving…" : "Send Blessings"}
                 </button>
                 {sent && (
-                  <p className="fade-up text-center font-serif text-lg italic text-maroon">
-                    Thank you! Your wish has been added to our book of blessings. 💐
+                  <p role="status" className="fade-up text-center font-serif text-lg italic text-maroon">
+                    {supabase
+                      ? "Thank you! Your blessing has been added to our shared book. 💐"
+                      : "Thank you! Your blessing has been saved on this device. 💐"}
+                  </p>
+                )}
+                {!supabase && (
+                  <p className="text-center font-sans text-xs text-ink/60">
+                    Saved on this device only. Connect Supabase to share blessings
+                    with everyone.
                   </p>
                 )}
                 {error && (
@@ -268,7 +344,7 @@ export function RsvpSection() {
                   </p>
                 ) : error && wishes.length === 0 ? (
                   <p role="alert" className="py-8 text-center font-serif text-lg italic text-maroon">
-                    The blessings book is temporarily unavailable.
+                    {error}
                   </p>
                 ) : wishes.length === 0 ? (
                   <p className="py-8 text-center font-serif text-lg italic text-ink/55">

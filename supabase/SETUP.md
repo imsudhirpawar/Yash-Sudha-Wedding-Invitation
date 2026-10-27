@@ -12,10 +12,15 @@ do not already have one.
 3. Create a local `.env.local` file in the project root using
    [`.env.example`](../.env.example) as a template, and fill in those two
    values.
-4. Set the same `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` variables in
-   the website's hosting/build settings, then rebuild and redeploy the site.
+4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` in the
+   website's hosting/build settings, then rebuild and redeploy the site. The
+   app also accepts the legacy `VITE_SUPABASE_ANON_KEY` variable.
 
 The public read/insert policies let guests read and submit blessings without
 signing in. Row-level security and database constraints remain enabled.
 Supabase Realtime distributes new blessings live; the page also refreshes its
 list periodically as a fallback.
+
+Without these environment variables, blessings are saved in the current
+browser's local storage and are not visible to other guests. Configure Supabase
+for a shared book that persists across devices.
