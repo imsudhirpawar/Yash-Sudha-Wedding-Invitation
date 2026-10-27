@@ -95,7 +95,7 @@ export const heroImage = hero;
 
 export const venue = {
   name: "The Heritage Banquet",
-  address: "Second Floor, Citi Mall, Near K V Pendharkar College, M.I, D.C, Kalyan Rd, Dombivli, Tata Power Company Limited, Dombivli East, Kalyan, Maharashtra 421203, India",
+  address: "Second Floor, Citi Mall, Near K V Pendharkar College, M.I, D.C, Kalyan Rd, Dombivli, Tata Power Company Limited, Dombivli (E), Kalyan, Maharashtra 421203, India",
   mapsQuery: "place/The+Heritage+Banquet/@19.2132055,73.1015473,818m/data=!3m3!1e3!4b1!5s0x3be79596d7159c05:0x6390a95e5ecd9fd7!4m6!3m5!1s0x3be79596d7a03127:0x9c31914b11435d51!8m2!3d19.2132056!4d73.1061607!16s%2Fg%2F1vkxkqw2?hl=en-US&entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
 };
 
