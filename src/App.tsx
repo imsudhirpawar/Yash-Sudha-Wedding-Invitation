@@ -5,7 +5,12 @@ import Preloader from "./components/Preloader";
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Countdown, { StorySection } from "./components/Countdown";
-import { CoupleSection, EventsSection, GallerySection } from "./components/Sections";
+import {
+  CoupleSection,
+  EventsSection,
+  GallerySection,
+  InviterSection,
+} from "./components/Sections";
 import { Footer, RsvpSection, VenueSection } from "./components/Rsvp";
 import Music from "./components/Music";
 
@@ -31,6 +36,7 @@ export default function App() {
             <Countdown />
             {/* <StorySection story={story} /> */}
             <EventsSection />
+            <InviterSection />
             {/* <GallerySection /> */}
             <VenueSection />
             <RsvpSection />

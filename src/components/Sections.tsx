@@ -112,6 +112,50 @@ export function EventsSection() {
   );
 }
 
+/* ------------------------------------------------ Inviters */
+export function InviterSection() {
+  const inviters = [
+    [
+      { name: "Kumar Mrudul kajolkar", phone: "8291453280" },
+      { name: "Shri. Rahul kapdan", phone: "7666222697" },
+    ],
+    [
+      { name: "Shri. Digambar kasar", phone: "9892405086" },
+      { name: "Shri. Anil kasar", phone: "9167435521" },
+    ],
+  ];
+
+  return (
+    <section id="inviters" className="paper py-20 sm:py-28">
+      <div className="mx-auto max-w-5xl px-6">
+        <SectionTitle kicker="With warm regards" title="Inviter" />
+
+        <div className="mt-14 grid gap-6 sm:grid-cols-2">
+          {inviters.map((column, i) => (
+            <Reveal key={i} delay={i * 120}>
+              <div className="h-full rounded-2xl border border-gold/40 bg-white/60 p-7 shadow-[0_16px_40px_-30px_rgba(109,18,38,0.6)] backdrop-blur-sm">
+                <ul className="space-y-6">
+                  {column.map((inviter) => (
+                    <li key={inviter.phone}>
+                      <p className="font-display text-xl text-maroon">{inviter.name}</p>
+                      <a
+                        href={`tel:${inviter.phone}`}
+                        className="mt-1 inline-block font-sans text-sm tracking-wider text-maroon-soft transition hover:text-maroon"
+                      >
+                        {inviter.phone}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ------------------------------------------------ Gallery */
 export function GallerySection() {
   const [active, setActive] = useState<number | null>(null);

@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { couple, venue, weddingDate } from "../data";
 import { Divider, Reveal, SectionTitle } from "./Common";
+import { supabase } from "../lib/supabase";
 
 /* ------------------------------------------------ Venue */
 export function VenueSection() {
@@ -83,10 +84,12 @@ function AddToCalendar() {
 }
 
 /* ------------------------------------------------ Blessings */
-type Wish = { name: string; message: string; at: number };
-
-const KEY = "yash-sudharani-blessings";
-const LEGACY_KEY = "yash-sudharani-wishes";
+type Wish = {
+  id: number;
+  name: string;
+  message: string;
+  created_at: string;
+};
 
 export function RsvpSection() {
   const [wishes, setWishes] = useState<Wish[]>([]);
@@ -95,37 +98,95 @@ export function RsvpSection() {
     message: "",
   });
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      localStorage.removeItem(LEGACY_KEY);
-      const raw = localStorage.getItem(KEY);
-      if (raw) setWishes(JSON.parse(raw));
-    } catch {
-      /* ignore */
+    const client = supabase;
+    if (!client) {
+      setError("The shared blessings book is not configured yet.");
+      setLoading(false);
+      return;
     }
+
+    let active = true;
+    const loadWishes = async () => {
+      try {
+        const { data, error: loadError } = await client
+          .from("blessings")
+          .select("id, name, message, created_at")
+          .order("created_at", { ascending: false });
+
+        if (!active) return;
+        if (loadError) {
+          setError(`Could not load blessings: ${loadError.message}`);
+        } else {
+          setWishes(data);
+          setError(null);
+        }
+      } catch (loadError) {
+        if (!active) return;
+        const details =
+          loadError instanceof Error ? loadError.message : "Unexpected network error.";
+        setError(`Could not load blessings: ${details}`);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
+    void loadWishes();
+    const channel = client
+      .channel("shared-blessings")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "blessings" },
+        () => void loadWishes(),
+      )
+      .subscribe();
+    const refreshInterval = window.setInterval(() => void loadWishes(), 15000);
+
+    return () => {
+      active = false;
+      window.clearInterval(refreshInterval);
+      void client.removeChannel(channel);
+    };
   }, []);
 
-  const submit = (e: FormEvent) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.name.trim() || !form.message.trim()) return;
-    const next = [
-      {
-        name: form.name.trim(),
-        message: form.message.trim(),
-        at: Date.now(),
-      },
-      ...wishes,
-    ];
-    setWishes(next);
-    try {
-      localStorage.setItem(KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
+    const client = supabase;
+    if (!client) {
+      setError("The shared blessings book is not configured yet.");
+      return;
     }
-    setForm({ name: "", message: "" });
-    setSent(true);
-    setTimeout(() => setSent(false), 5000);
+
+    setSaving(true);
+    setError(null);
+    try {
+      const { data, error: insertError } = await client
+        .from("blessings")
+        .insert({ name: form.name.trim(), message: form.message.trim() })
+        .select("id, name, message, created_at")
+        .single();
+
+      if (insertError) {
+        setError(`Could not save your blessing: ${insertError.message}`);
+        return;
+      }
+
+      setWishes((current) => [data, ...current.filter((wish) => wish.id !== data.id)]);
+      setForm({ name: "", message: "" });
+      setSent(true);
+      setTimeout(() => setSent(false), 5000);
+    } catch (insertError) {
+      const details =
+        insertError instanceof Error ? insertError.message : "Unexpected network error.";
+      setError(`Could not save your blessing: ${details}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const field =
@@ -156,6 +217,7 @@ export function RsvpSection() {
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     placeholder="e.g. Ananya Sharma"
+                    maxLength={100}
                     required
                   />
                 </div>
@@ -168,18 +230,25 @@ export function RsvpSection() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Write your blessings for Yash & Sudharani…"
+                    maxLength={2000}
                     required
                   />
                 </div>
                 <button
                   type="submit"
+                  disabled={saving || !supabase}
                   className="w-full rounded-full bg-maroon py-4 font-sans text-[11px] uppercase tracking-[0.35em] text-cream transition hover:scale-[1.02]"
                 >
-                  Send Blessings
+                  {saving ? "Saving…" : "Send Blessings"}
                 </button>
                 {sent && (
                   <p className="fade-up text-center font-serif text-lg italic text-maroon">
                     Thank you! Your wish has been added to our book of blessings. 💐
+                  </p>
+                )}
+                {error && (
+                  <p role="alert" className="text-center font-sans text-sm text-maroon">
+                    {error}
                   </p>
                 )}
               </div>
@@ -193,14 +262,22 @@ export function RsvpSection() {
               </h3>
               <Divider className="my-5" />
               <div className="max-h-[26rem] space-y-4 overflow-y-auto pr-1">
-                {wishes.length === 0 ? (
+                {loading ? (
+                  <p className="py-8 text-center font-serif text-lg italic text-ink/55">
+                    Loading blessings…
+                  </p>
+                ) : error && wishes.length === 0 ? (
+                  <p role="alert" className="py-8 text-center font-serif text-lg italic text-maroon">
+                    The blessings book is temporarily unavailable.
+                  </p>
+                ) : wishes.length === 0 ? (
                   <p className="py-8 text-center font-serif text-lg italic text-ink/55">
                     Be the first to share a blessing.
                   </p>
                 ) : (
-                  wishes.map((w, i) => (
+                  wishes.map((w) => (
                     <div
-                      key={`${w.at}-${i}`}
+                      key={w.id}
                       className="rounded-2xl border border-gold/30 bg-cream px-5 py-4"
                     >
                       <p className="font-display text-lg text-maroon">{w.name}</p>

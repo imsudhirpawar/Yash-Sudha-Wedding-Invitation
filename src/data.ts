@@ -3,8 +3,8 @@ import g2 from "./assets/g2.jpg";
 import g3 from "./assets/g3.jpg";
 import g4 from "./assets/g4.jpg";
 import hero from "./assets/hero.jpg";
-import groomImg from "./assets/groom.jpg";
-import brideImg from "./assets/bride.jpg";
+import groomImg from "./assets/groom.png";
+import brideImg from "./assets/bride.png";
 
 export const portraits = { groom: groomImg, bride: brideImg };
 
@@ -13,7 +13,7 @@ export const couple = {
     name: "Yash",
     full: "Mr. Yash Ganesh Pandit",
     role: "The Groom",
-    parents: "Son of Late Shri Ganesh Madhukar Pandit & Late Smt. Aarti Ganesh Pandit",
+    parents: "Son of Late Shri. Ganesh Madhukar Pandit & Late Smt. Aarti Ganesh Pandit",
     words:
       "A restless heart, a gentle soul — he found his home, his happiness, and his forever in her.",
   },
@@ -64,10 +64,10 @@ export const events = [
   //   note: "The groom arrives — with drums, lights and joy.",
   // },
   {
-    icon: "🔥",
+    icon: "🎺",
     name: "Shubh Vivah",
     date: "Wednesday, 30 December 2026",
-    time: "11:12 AM",
+    time: "11:12 AM Muhurat",
     venue: "The Heritage Banquet, Dombivli (E)",
     note: "Seven vows, seven steps, one forever.",
   },
@@ -95,7 +95,7 @@ export const heroImage = hero;
 
 export const venue = {
   name: "The Heritage Banquet",
-  address: "Ground Floor, Citi Mall, Near K V Pendharkar College, M.I, D.C, Kalyan Rd, Dombivli, Tata Power Company Limited, Dombivli East, Kalyan, Maharashtra 421203, India",
+  address: "Second Floor, Citi Mall, Near K V Pendharkar College, M.I, D.C, Kalyan Rd, Dombivli, Tata Power Company Limited, Dombivli East, Kalyan, Maharashtra 421203, India",
   mapsQuery: "place/The+Heritage+Banquet/@19.2132055,73.1015473,818m/data=!3m3!1e3!4b1!5s0x3be79596d7159c05:0x6390a95e5ecd9fd7!4m6!3m5!1s0x3be79596d7a03127:0x9c31914b11435d51!8m2!3d19.2132056!4d73.1061607!16s%2Fg%2F1vkxkqw2?hl=en-US&entry=ttu&g_ep=EgoyMDI2MTAwNy4wIKXMDSoASAFQAw%3D%3D",
 };
 
